@@ -12,12 +12,7 @@
   This task is a bit different from the one described in the paper since we
   can make more than one query after each training sequence.
 
-  NOTE: This is still a work in progress.
-  
-  Some interesting observations:
-    - by iteration ~30k, the NTM may end up memorizing the *last* seen item, 
-      overwriting the previous item (e.g. for each item, it always writes to
-      slots 2, 3 and 4).
+  The model should converge to the optimum after about 20000 iterations.
 
 --]]
 

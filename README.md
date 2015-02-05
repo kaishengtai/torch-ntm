@@ -38,6 +38,3 @@ For the associative recall task:
 ```
 th tasks/recall.lua
 ```
-
-The associative recall task isn't working super well quite yet. See the header
-of the training script for some comments.
