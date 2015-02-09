@@ -9,16 +9,22 @@
 --]]
 
 require('../../ntm')
+require('./util')
 require('optim')
 require('sys')
 
 torch.manualSeed(0)
 
-local input_dim = 10
-local output_dim = input_dim
-local mem_rows = 128
-local mem_cols = 20
-local cont_dim = 100
+-- NTM config
+local config = {
+  input_dim = 10,
+  output_dim = 10,
+  mem_rows = 128,
+  mem_cols = 20,
+  cont_dim = 100
+}
+
+local input_dim = config.input_dim
 local start_symbol = torch.zeros(input_dim)
 start_symbol[1] = 1
 local end_symbol = torch.zeros(input_dim)
@@ -43,9 +49,7 @@ function forward(model, seq, print_flag)
   if print_flag then print('write head max') end
   for j = 1, len do
     model:forward(seq[j])
-    if print_flag then
-      printf("%d\t%.4f\n", argmax(model:get_write_weights()))
-    end
+    if print_flag then print_write_max(model) end
   end
 
   -- present end symbol
@@ -60,9 +64,7 @@ function forward(model, seq, print_flag)
     criteria[j] = nn.BCECriterion()
     outputs[j] = model:forward(zeros)
     loss = loss + criteria[j]:forward(outputs[j], seq[j]) * input_dim
-    if print_flag then
-      printf("%d\t%.4f\n", argmax(model:get_read_weights()))
-    end
+    if print_flag then print_read_max(model) end
   end
   return outputs, criteria, loss
 end
@@ -86,19 +88,7 @@ function backward(model, seq, outputs, criteria)
   model:backward(start_symbol, zeros)
 end
 
-function argmax(x)
-  local index = 1
-  local max = x[1]
-  for i = 2, x:size(1) do
-    if x[i] > max then
-      index = i
-      max = x[i]
-    end
-  end
-  return index, max
-end
-
-local model = ntm.NTM(input_dim, output_dim, mem_rows, mem_cols, cont_dim)
+local model = ntm.NTM(config)
 local params, grads = model:getParameters()
 
 local num_iters = 10000

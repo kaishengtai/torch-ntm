@@ -17,16 +17,20 @@
 --]]
 
 require('../../ntm')
-require('optim')
+require('./util')
 require('sys')
 
 torch.manualSeed(0)
 
-local input_dim = 8
-local output_dim = input_dim
-local mem_rows = 128
-local mem_cols = 20
-local cont_dim = 100
+local config = {
+  input_dim = 8,
+  output_dim = 8,
+  mem_rows = 128,
+  mem_cols = 20,
+  cont_dim = 100
+}
+
+local input_dim = config.input_dim
 
 -- delimiter symbol and query symbol
 local delim_symbol = torch.zeros(input_dim)
@@ -154,19 +158,7 @@ function backward(model, items, query_indices, outputs, criteria)
   end
 end
 
-function argmax(x)
-  local index = 1
-  local max = x[1]
-  for i = 2, x:size(1) do
-    if x[i] > max then
-      index = i
-      max = x[i]
-    end
-  end
-  return index, max
-end
-
-local model = ntm.NTM(input_dim, output_dim, mem_rows, mem_cols, cont_dim)
+local model = ntm.NTM(config)
 local params, grads = model:getParameters()
 local num_iters = 50000
 local min_len = 2

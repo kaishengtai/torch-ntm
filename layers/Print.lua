@@ -16,11 +16,7 @@ function Print:updateOutput(input)
   if self.label ~= nil then
     print(self.label)
   end
-  if input:dim() == 1 then
-    print(input:view(1, input:size(1)))
-  else
-    print(input)
-  end
+  print(input)
   return self.output
 end
 
