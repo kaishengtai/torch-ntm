@@ -16,7 +16,7 @@
 
 --]]
 
-require('../../torch-ntm')
+require('../../ntm')
 require('./util')
 require('sys')
 
