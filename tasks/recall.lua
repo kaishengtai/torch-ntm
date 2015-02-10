@@ -16,7 +16,7 @@
 
 --]]
 
-require('../../ntm')
+require('../')
 require('./util')
 require('sys')
 

@@ -1,4 +1,4 @@
-require('../../ntm')
+require('../')
 require('torch')
 require('nn')
 
