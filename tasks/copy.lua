@@ -8,7 +8,7 @@
 
 --]]
 
-require('../../ntm')
+require('../')
 require('./util')
 require('optim')
 require('sys')
