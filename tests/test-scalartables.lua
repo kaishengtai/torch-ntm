@@ -1,4 +1,4 @@
-require('../../ntm')
+require('../../torch-ntm')
 
 local v = torch.Tensor{1,2,3}
 local c = torch.Tensor{1.5}
