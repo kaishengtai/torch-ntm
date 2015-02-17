@@ -62,7 +62,7 @@ function NTM:init_grad_inputs()
   else
     wr_gradInput, r_gradInput = {}, {}
     for i = 1, self.read_heads do
-      wr_gradInput[i] = torch.zeros(self.mem_rows) 
+      wr_gradInput[i] = torch.zeros(self.mem_rows)
       r_gradInput[i] = torch.zeros(self.mem_cols)
     end
   end
@@ -94,7 +94,7 @@ end
 -- read/write weights, and the state of the LSTM controller.
 function NTM:new_init_module()
   local dummy = nn.Identity()() -- always zero
-  local output_init = nn.Tanh()(nn.Linear(1, self.output_dim)(dummy))
+  local output_init = nn.Tanh()(nn.Linear(1, self.input_dim)(dummy))
 
   -- memory
   local M_init_lin = nn.Linear(1, self.mem_rows * self.mem_cols)
@@ -113,7 +113,7 @@ function NTM:new_init_module()
     -- This sort of initialization seems to be important in my experiments (kst).
     wr_init_lin.bias:copy(torch.range(self.mem_rows, 1, -1))
   end
-  
+
   -- write weights
   local ww_init = {}
   for i = 1, self.write_heads do
@@ -123,7 +123,7 @@ function NTM:new_init_module()
     -- See initialization comment above
     ww_init_lin.bias:copy(torch.range(self.mem_rows, 1, -1))
   end
-  
+
   -- controller state
   local m_init, c_init = {}, {}
   for i = 1, self.cont_layers do
@@ -164,7 +164,7 @@ function NTM:new_cell()
 
   -- output and hidden states of the controller module
   local mtable, ctable = self:new_controller_module(input, r_p, mtable_p, ctable_p)
-  local m = (self.cont_layers == 1) and mtable 
+  local m = (self.cont_layers == 1) and mtable
     or nn.SelectTable(self.cont_layers)(mtable)
   local M, wr, ww, r = self:new_mem_module(M_p, wr_p, ww_p, m)
   local output = self:new_output_module(m)
@@ -303,7 +303,7 @@ function NTM:new_head(M_p, w_p, m, is_read)
   -- exponential focusing parameter
   local gamma = nn.AddConstant(1)(
     nn.SoftPlus()(nn.Linear(self.cont_dim, 1)(m)))
-  
+
   local sim = nn.SmoothCosineSimilarity(){M_p, k}
   local wc = nn.SoftMax()(nn.ScalarMulTable(){sim, beta})
   local wg = nn.CAddTable(){
@@ -314,7 +314,7 @@ function NTM:new_head(M_p, w_p, m, is_read)
   local wtilde = nn.CircularConvolution(){wg, s}
   local wpow = nn.PowTable(){wtilde, gamma}
   local w = nn.Normalize()(wpow)
-  
+
   if is_read then
     local r = nn.MixtureTable(){w, M_p}
     return w, r
@@ -331,7 +331,7 @@ function NTM:new_output_module(m)
   return output
 end
 
--- Forward propagate one time step. The outputs of previous time steps are 
+-- Forward propagate one time step. The outputs of previous time steps are
 -- cached for backpropagation.
 function NTM:forward(input)
   self.depth = self.depth + 1
@@ -340,7 +340,7 @@ function NTM:forward(input)
     cell = self:new_cell()
     self.cells[self.depth] = cell
   end
-  
+
   local prev_outputs
   if self.depth == 1 then
     prev_outputs = self.init_module:forward(torch.Tensor{0})
