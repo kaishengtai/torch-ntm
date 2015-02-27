@@ -111,7 +111,7 @@ print('num params: ' .. params:size(1))
 --  decay = 0.95
 --}
 
-local rmsprop_state = {}
+local adam_state = {}
 
 -- local adagrad_state = {
 --   learningRate = 1e-3
@@ -124,9 +124,9 @@ for iter = 1, num_iters do
     if print_flag then
       print(string.rep('-', 80))
       print('iter = ' .. iter)
-      print('learn rate = ' .. rmsprop_state.learningRate)
-      print('momentum = ' .. rmsprop_state.momentum)
-      print('decay = ' .. rmsprop_state.decay)
+      --print('learn rate = ' .. rmsprop_state.learningRate)
+      --print('momentum = ' .. rmsprop_state.momentum)
+      --print('decay = ' .. rmsprop_state.decay)
       printf('t = %.1fs\n', sys.clock() - start)
     end
 
