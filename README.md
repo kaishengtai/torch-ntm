@@ -4,7 +4,7 @@ A Neural Turing Machine in Torch
 A Torch implementation of the Neural Turing Machine model described in this 
 [paper](http://arxiv.org/abs/1410.5401) by Alex Graves, Greg Wayne and Ivo Danihelka.
 
-This implementation uses an LSTM controller with one read head and one write head.
+This implementation uses an LSTM controller. NTM models with multiple read/write heads are supported.
 
 ## Requirements
 
