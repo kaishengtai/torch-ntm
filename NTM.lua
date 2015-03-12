@@ -41,7 +41,6 @@ function NTM:__init(config)
   self.init_module = self:new_init_module()
 
   self:init_grad_inputs()
-  local cell_params, _ = self.master_cell:parameters()
 end
 
 function NTM:init_grad_inputs()
