@@ -7,7 +7,6 @@ printf = utils.printf
 
 include('rmsprop.lua')
 include('layers/CircularConvolution.lua')
-include('layers/Normalize.lua')
 include('layers/OuterProd.lua')
 include('layers/PowTable.lua')
 include('layers/Print.lua')

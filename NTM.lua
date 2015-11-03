@@ -312,7 +312,7 @@ function NTM:new_head(M_p, w_p, m, is_read)
 
   local wtilde = nn.CircularConvolution(){wg, s}
   local wpow = nn.PowTable(){wtilde, gamma}
-  local w = nn.Normalize()(wpow)
+  local w = nn.Normalize(1)(wpow)
   
   if is_read then
     local r = nn.MixtureTable(){w, M_p}
