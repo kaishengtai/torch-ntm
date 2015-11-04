@@ -20,7 +20,7 @@ require('../')
 require('./util')
 require('sys')
 
-torch.manualSeed(0)
+torch.manualSeed(123)
 
 local config = {
   input_dim = 8,
@@ -173,11 +173,13 @@ print('sequence element length = ' .. item_len)
 print(string.rep('=', 80))
 print('num params: ' .. params:size(1))
 
-local rmsprop_state = {
-  learningRate = 1e-4,
-  momentum = 0.9,
-  decay = 0.95
-}
+--local rmsprop_state = {
+--  learningRate = 1e-4,
+--  momentum = 0.9,
+--  decay = 0.95
+--}
+
+local adam_state = {}
 
 -- train
 local start = sys.clock()
@@ -218,5 +220,6 @@ for iter = 1, num_iters do
     return loss, grads
   end
 
-  ntm.rmsprop(feval, params, rmsprop_state)
+  --ntm.rmsprop(feval, params, rmsprop_state)
+  optim.adam(feval, params, adam_state)
 end

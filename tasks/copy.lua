@@ -13,7 +13,7 @@ require('./util')
 require('optim')
 require('sys')
 
-torch.manualSeed(0)
+torch.manualSeed(123)
 
 -- NTM config
 local config = {
@@ -105,11 +105,13 @@ print('max sequence length = ' .. max_len)
 print(string.rep('=', 80))
 print('num params: ' .. params:size(1))
 
-local rmsprop_state = {
-  learningRate = 1e-4,
-  momentum = 0.9,
-  decay = 0.95
-}
+--local rmsprop_state = {
+--  learningRate = 1e-4,
+--  momentum = 0.9,
+--  decay = 0.95
+--}
+
+local adam_state = {}
 
 -- local adagrad_state = {
 --   learningRate = 1e-3
@@ -122,9 +124,9 @@ for iter = 1, num_iters do
     if print_flag then
       print(string.rep('-', 80))
       print('iter = ' .. iter)
-      print('learn rate = ' .. rmsprop_state.learningRate)
-      print('momentum = ' .. rmsprop_state.momentum)
-      print('decay = ' .. rmsprop_state.decay)
+      --print('learn rate = ' .. rmsprop_state.learningRate)
+      --print('momentum = ' .. rmsprop_state.momentum)
+      --print('decay = ' .. rmsprop_state.decay)
       printf('t = %.1fs\n', sys.clock() - start)
     end
 
@@ -154,5 +156,6 @@ for iter = 1, num_iters do
   end
 
   --optim.adagrad(feval, params, adagrad_state)
-  ntm.rmsprop(feval, params, rmsprop_state)
+  --ntm.rmsprop(feval, params, rmsprop_state)
+  optim.adam(feval, params, adam_state)
 end
